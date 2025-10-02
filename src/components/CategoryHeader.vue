@@ -7,11 +7,13 @@ import { ref } from 'vue';
 import ButtonIcon from './ButtonIcon.vue';
 import InputString from './InputString.vue';
 import { useCategoryStore } from '@/stores/categories.store';
+import { useRouter } from 'vue-router';
 
 const { category } = defineProps<{ category: ICategory }>();
 const isEdited = ref<boolean>();
 const newCategoryName = ref<string>(category.name);
 const categoryStore = useCategoryStore();
+const router = useRouter();
 
 function toggleEdit() {
   isEdited.value = !isEdited.value;
@@ -24,6 +26,11 @@ function updateCategory() {
   categoryStore.updateCategory(newCategoryName.value, category.alias, category.id);
   toggleEdit();
 }
+
+function deleteCategory() {
+  categoryStore.deleteCategory(category.id);
+  router.push({ name: 'main' });
+}
 </script>
 
 <template>
@@ -35,11 +42,11 @@ function updateCategory() {
         <IconOk />
       </ButtonIcon>
     </div>
-    <div>
+    <div class="category-header__actions">
       <ButtonIcon v-if="!isEdited" @click="toggleEdit">
         <IconEdit />
       </ButtonIcon>
-      <ButtonIcon>
+      <ButtonIcon @click="deleteCategory">
         <IconTrash />
       </ButtonIcon>
     </div>
@@ -55,7 +62,12 @@ function updateCategory() {
   &__change {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 8px;
   }
 }
 </style>
