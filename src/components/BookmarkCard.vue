@@ -4,12 +4,21 @@ import ButtonIconBig from './ButtonIconBig.vue';
 import IconTrashWhite from '@/icons/IconTrashWhite.vue';
 import IconLinkWhite from '@/icons/IconLinkWhite.vue';
 import { useBookmarkStore } from '@/stores/boookmark.store';
+import { ref } from 'vue';
+import PopupConfirm from './PopupConfirm.vue';
 
-const { title, image, url, id } = defineProps<IBookmark>();
+const { title, image, url, id, category_id } = defineProps<IBookmark>();
 const bookmarkStore = useBookmarkStore();
+
+const isOpened = ref<boolean>(false);
 
 function openLink() {
   window.open(url, '_blank');
+}
+
+function deleteBookmark() {
+  isOpened.value = !isOpened.value;
+  bookmarkStore.delteBookmark(id, category_id);
 }
 </script>
 
@@ -20,13 +29,19 @@ function openLink() {
       {{ title }}
     </div>
     <div class="bookmark-card__footer">
-      <ButtonIconBig @click="() => bookmarkStore.delteBookmark(id, category_id)">
+      <ButtonIconBig @click="isOpened = !isOpened">
         <IconTrashWhite />
       </ButtonIconBig>
       <ButtonIconBig @click="openLink">
         <IconLinkWhite />
       </ButtonIconBig>
     </div>
+    <PopupConfirm
+      text="Хотите удалить закладку?"
+      :is-opened="isOpened"
+      @cancel="isOpened = !isOpened"
+      @ok="deleteBookmark"
+    />
   </div>
 </template>
 
@@ -35,7 +50,6 @@ function openLink() {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* gap: 24px; */
   padding: 20px;
   background: var(--color-fg);
   border-radius: 30px;

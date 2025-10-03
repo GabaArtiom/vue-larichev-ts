@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import ButtonText from './ButtonText.vue';
 
-const { isOpened, text } = defineProps<{ isOpened: boolean; text: string }>();
+const { isOpened, text } = defineProps<{
+  isOpened: boolean;
+  text: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'ok'): void;
+  (e: 'cancel'): void;
+}>();
 </script>
 
 <template>
   <div v-if="isOpened" class="cover">
-    <div class="cover__popup">
+    <div class="popup">
       {{ text }}
-      <div class="cover__confirm">
-        <ButtonText>Да</ButtonText>
-        <ButtonText>Нет</ButtonText>
+      <div class="popup__confirm">
+        <ButtonText @click="emit('ok')">Да</ButtonText>
+        <ButtonText @click="emit('cancel')">Нет</ButtonText>
       </div>
     </div>
   </div>
@@ -27,18 +35,18 @@ const { isOpened, text } = defineProps<{ isOpened: boolean; text: string }>();
   justify-content: center;
   align-items: center;
   background-color: var(--color-inactive);
+}
 
-  &__popup {
-    padding: 20px;
-    min-width: 350px;
-    border-radius: 20px;
-    background: var(--color-bg);
-  }
+.popup {
+  padding: 20px;
+  /* min-width: 350px; */
+  border-radius: 20px;
+  background: var(--color-bg);
 
   &__confirm {
-    margin-top: 16px;
     display: flex;
-
+    margin-top: 16px;
+    gap: 8px;
   }
 }
 </style>
