@@ -20,7 +20,7 @@ function openLink() {
       {{ title }}
     </div>
     <div class="bookmark-card__footer">
-      <ButtonIconBig @click="() => bookmarkStore.delteBookmark(id)">
+      <ButtonIconBig @click="() => bookmarkStore.delteBookmark(id, category_id)">
         <IconTrashWhite />
       </ButtonIconBig>
       <ButtonIconBig @click="openLink">
@@ -34,7 +34,8 @@ function openLink() {
 .bookmark-card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  justify-content: space-between;
+  /* gap: 24px; */
   padding: 20px;
   background: var(--color-fg);
   border-radius: 30px;

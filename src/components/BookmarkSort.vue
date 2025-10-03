@@ -28,9 +28,9 @@ const emit = defineEmits<{
 
 <style scoped lang="scss">
 .sort {
-  margin-top: 16px;
   display: flex;
   gap: 8px;
+  margin-top: 16px;
 
   &__btn {
     background: none;

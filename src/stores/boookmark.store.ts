@@ -5,20 +5,29 @@ import { ref } from 'vue';
 
 export const useBookmarkStore = defineStore('bookmarks', () => {
   const bookmarks = ref<IBookmark[]>([]);
+  const activeSort = ref<string>('date');
 
-  async function fetchBookmarks(categoryId: number, sort: string) {
-    const { data } = await client().get<IBookmark[]>(API_ROUTES.bookmarks.get(categoryId), {
+  async function fetchBookmarks(category_id: number, sort: string) {
+    const { data } = await client().get<IBookmark[]>(API_ROUTES.bookmarks.get(category_id), {
       params: {
-        sort
-      }
+        sort,
+      },
     });
     bookmarks.value = data;
   }
 
-  async function delteBookmark(id: number, ) {
+  async function delteBookmark(id: number, category_id: number) {
     await client().delete<IBookmark[]>(API_ROUTES.bookmarks.delete(id));
-    // fetchBookmarks(categoryId);
+    fetchBookmarks(category_id, activeSort.value);
   }
 
-  return { bookmarks, fetchBookmarks, delteBookmark };
+  async function addBookmark(url: string, category_id: number) {
+    const { data } = await client().post<IBookmark>(API_ROUTES.bookmarks.create, {
+      url,
+      category_id,
+    });
+    bookmarks.value.push(data);
+  }
+
+  return { bookmarks, fetchBookmarks, delteBookmark, activeSort, addBookmark };
 });
