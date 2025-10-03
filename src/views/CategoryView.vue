@@ -6,13 +6,28 @@ import CategoryHeader from '@/components/CategoryHeader.vue';
 import type { ICategory } from '@/interfaces/ICategory';
 import { useBookmarkStore } from '@/stores/boookmark.store';
 import { useCategoryStore } from '@/stores/categories.store';
-import { onMounted, ref, watch } from 'vue';
+import { defineAsyncComponent, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const categoryStore = useCategoryStore();
 const bookmarkStore = useBookmarkStore();
 const category = ref<ICategory>();
+
+// const CategoryHeader = defineAsyncComponent({
+//   loader: async () => {
+//     await new Promise<void>((resolve) => {
+//       setTimeout(() => {
+//         resolve();
+//       }, 2000);
+//     });
+//     return import('@/components/CategoryHeader.vue');
+//   },
+//   loadingComponent: BookmarkAdd,
+//   errorComponent: BookmarkAdd,
+//   delay: 200,
+//   timeout: 3000,
+// });
 
 function sortBookmarks(sort: string) {
   bookmarkStore.activeSort = sort;
@@ -47,7 +62,6 @@ watch(
   <div class="category__sort">
     <BookmarkSort :option="bookmarkStore.activeSort" @sort="sortBookmarks" />
   </div>
-  <TestComp />
   <div class="category__list">
     <BookmarkCard v-for="item in bookmarkStore.bookmarks" :key="item.id" v-bind="item" />
     <BookmarkAdd v-if="category" :category_id="category.id" />
