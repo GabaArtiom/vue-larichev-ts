@@ -16,8 +16,8 @@ function addBookmark() {
     return;
   }
   bookmarkStore.addBookmark(newUrl.value, category_id);
-  newUrl.value = ""
-  toggleIsEdited()
+  newUrl.value = '';
+  toggleIsEdited();
 }
 
 function toggleIsEdited() {
